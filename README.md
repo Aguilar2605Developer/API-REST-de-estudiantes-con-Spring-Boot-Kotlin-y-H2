@@ -41,7 +41,6 @@ Para proteger la base de datos real y mover la información limpia, implementé 
 
 #### Crear Estudiante (POST) y Estrucura de API de acuerdo a parámetros ####
 * **URL:** http://localhost:2525/api/students
-* **JSON enviado:**
 ```json
 src/main/kotlin/com/example/api_rest_estudiantes
 ├── controller
