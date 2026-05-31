@@ -39,7 +39,7 @@ Para proteger la base de datos real y mover la información limpia, implementé 
 
 ### Endpoints de la API (Puerto 2525)
 
-#### Crear Estudiante (POST)
+#### Crear Estudiante (POST) y Estrucura de API de acuerdo a parámetros ####
 * **URL:** http://localhost:2525/api/students
 * **JSON enviado:**
 ```json
