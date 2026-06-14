@@ -11,12 +11,14 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/students")
 class StudentController(private val studentService: StudentService) {
 
+    // Creo un estudiante y retorno su response con status 201
     @PostMapping
     fun createStudent(@RequestBody request: StudentRequest): ResponseEntity<StudentResponse> {
         val createdStudent = studentService.saveStudent(request)
         return ResponseEntity(createdStudent, HttpStatus.CREATED)
     }
 
+    // Obtengo todos los estudiantes y los retorno con status 200
     @GetMapping
     fun getAllStudents(): ResponseEntity<List<StudentResponse>> {
         val students = studentService.getAllStudents()
