@@ -2,21 +2,26 @@ package com.example.api_rest_estudiantes.dto
 
 import java.time.LocalDateTime
 
-// Creo el DTO de request para recibir los datos del enrollment desde el cliente
+// DTO para recibir los datos de un enrollment desde el cliente
 class EnrollmentRequest(
-    // Recibo los ids del student y subject para crear el enrollment
+    // Id del estudiante a inscribir
     val studentId: Long,
-    val subjectId: Long,
-    val status: String
+    // Id de la materia en la que se inscribe
+    val subjectId: Long
+    // Nota: el status no viene del cliente, se asigna automáticamente como "INSCRITO"
 )
 
-// Creo el DTO de response para enviar los datos del enrollment al cliente
+// DTO para enviar los datos de un enrollment al cliente
 class EnrollmentResponse(
     val id: Long,
-    // Envío los nombres del student y subject en lugar de sus ids
-    val studentName: String,
-    val subjectName: String,
+    // Fecha y hora de creación del enrollment
+    val createdAt: LocalDateTime,
     val status: String,
-    // Envío la fecha de creación del enrollment
-    val createdAt: LocalDateTime
+    // Objeto completo del estudiante
+    val student: StudentResponse,
+    // Objeto completo de la materia con su profesor
+    val subject: SubjectResponse
+)
+data class EnrollmentStatusUpdate(
+    val status: String
 )

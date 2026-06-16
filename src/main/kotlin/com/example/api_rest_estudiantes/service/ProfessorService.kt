@@ -1,14 +1,15 @@
 package com.example.api_rest_estudiantes.service
 
-// Importo los DTOs, repositorio y mapper que voy a necesitar
 import com.example.api_rest_estudiantes.dto.ProfessorRequest
 import com.example.api_rest_estudiantes.dto.ProfessorResponse
+import com.example.api_rest_estudiantes.entity.Professor
+import com.example.api_rest_estudiantes.exceptions.BlankNameException
+import com.example.api_rest_estudiantes.exceptions.ProfessorNotFound
 import com.example.api_rest_estudiantes.mappers.ProfessorMapper
 import com.example.api_rest_estudiantes.repository.ProfessorRepository
 import org.springframework.stereotype.Service
 
 @Service
-// Inserto el mapper y el repsotrio que voy a usar
 class ProfessorService(
     private val professorRepository: ProfessorRepository,
     private val professorMapper: ProfessorMapper
@@ -16,11 +17,10 @@ class ProfessorService(
 
     // Guardo un profesor en la base de datos y retorno su response
     fun saveProfessor(request: ProfessorRequest): ProfessorResponse {
-        // Convierto el request a entidad usando el mapper
+        // Valido que el nombre no esté vacío antes de guardar
+        if (request.name.isBlank()) throw BlankNameException(request.name)
         val professorEntity = professorMapper.toEntity(request)
-        // Guardo la entidad en la base de datos
         val savedProfessor = professorRepository.save(professorEntity)
-        // Convierto la entidad guardada a response y la retorno
         return professorMapper.toResponse(savedProfessor)
     }
 
@@ -28,5 +28,32 @@ class ProfessorService(
     fun getAllProfessors(): List<ProfessorResponse> {
         return professorRepository.findAll()
             .map { professorMapper.toResponse(it) }
+    }
+
+    // Busco un profesor por su id, si no existe lanzo excepción 404
+    fun getProfessorById(id: Long): ProfessorResponse {
+        val professor = professorRepository.findById(id)
+            .orElseThrow { ProfessorNotFound(id) }
+        return professorMapper.toResponse(professor)
+    }
+
+    // Actualizo nombre y email de un profesor existente
+    fun updateProfessor(id: Long, request: ProfessorRequest): ProfessorResponse {
+        // Verifico que el profesor exista
+        professorRepository.findById(id)
+            .orElseThrow { ProfessorNotFound(id) }
+        if (request.name.isBlank()) throw BlankNameException(request.name)
+        // Creo una nueva entidad con el mismo id y los nuevos datos
+        val updatedProfessor = Professor(id = id, name = request.name, email = request.email)
+        val savedProfessor = professorRepository.save(updatedProfessor)
+        return professorMapper.toResponse(savedProfessor)
+    }
+
+    // Elimino un profesor por su id
+    fun deleteProfessor(id: Long) {
+        // Verifico que el profesor exista antes de eliminar
+        professorRepository.findById(id)
+            .orElseThrow { ProfessorNotFound(id) }
+        professorRepository.deleteById(id)
     }
 }

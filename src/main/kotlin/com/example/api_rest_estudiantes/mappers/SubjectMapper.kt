@@ -1,10 +1,12 @@
 package com.example.api_rest_estudiantes.mappers
+
+import com.example.api_rest_estudiantes.dto.ProfessorResponse
 import com.example.api_rest_estudiantes.dto.SubjectRequest
 import com.example.api_rest_estudiantes.dto.SubjectResponse
+import com.example.api_rest_estudiantes.entity.Professor
 import com.example.api_rest_estudiantes.entity.Subject
 import org.springframework.stereotype.Component
-import com.example.api_rest_estudiantes.entity.Professor
-// Le digo a Spring que esta clase es un componente para que la pueda inyectar
+
 @Component
 class SubjectMapper {
 
@@ -12,6 +14,7 @@ class SubjectMapper {
     fun toEntity(request: SubjectRequest, professor: Professor): Subject {
         return Subject(
             name = request.name,
+            code = request.code,
             professor = professor
         )
     }
@@ -19,10 +22,14 @@ class SubjectMapper {
     // Convierto una entidad Subject a un SubjectResponse para enviar al cliente
     fun toResponse(subject: Subject): SubjectResponse {
         return SubjectResponse(
-            id = subject.id,
+            id = subject.id!!,
             name = subject.name,
-            // Envío el nombre del profesor que dicta esta materia
-            professorName = subject.professor.name
+            code = subject.code,
+            professor = ProfessorResponse(
+                id = subject.professor.id!!,
+                name = subject.professor.name,
+                email = subject.professor.email
+            )
         )
     }
 }

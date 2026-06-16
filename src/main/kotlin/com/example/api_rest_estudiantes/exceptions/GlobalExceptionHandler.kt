@@ -21,6 +21,24 @@ class GlobalExceptionHandler {
         return ResponseEntity(ex.message, HttpStatus.NOT_FOUND)
     }
 
+    // Capturo la excepción de profesor no encontrado y retorno un error 404
+    @ExceptionHandler(ProfessorNotFound::class)
+    fun handleProfessorNotFound(ex: ProfessorNotFound): ResponseEntity<String> {
+        return ResponseEntity(ex.message, HttpStatus.NOT_FOUND)
+    }
+
+    // Capturo la excepción de materia no encontrada y retorno un error 404
+    @ExceptionHandler(SubjectNotFound::class)
+    fun handleSubjectNotFound(ex: SubjectNotFound): ResponseEntity<String> {
+        return ResponseEntity(ex.message, HttpStatus.NOT_FOUND)
+    }
+
+    // Capturo la excepción de enrollment no encontrado y retorno un error 404
+    @ExceptionHandler(EnrollmentNotFound::class)
+    fun handleEnrollmentNotFound(ex: EnrollmentNotFound): ResponseEntity<String> {
+        return ResponseEntity(ex.message, HttpStatus.NOT_FOUND)
+    }
+
     // Capturo cualquier otra excepción no controlada y retorno un error 500
     @ExceptionHandler(Exception::class)
     fun handleGenericException(ex: Exception): ResponseEntity<String> {
